@@ -1,0 +1,24 @@
+erver:
+  port: 8080
+
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/tech_challenge_db}
+    username: ${SPRING_DATASOURCE_USERNAME:admin}
+    password: ${SPRING_DATASOURCE_PASSWORD:123456}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:dev-secret-dev-secret-dev-secret-dev-secret-32chars}
+    expiresMinutes: ${JWT_EXPIRES_MINUTES:120}
+
+springdoc:
+  swagger-ui:
+    path: /swagger
