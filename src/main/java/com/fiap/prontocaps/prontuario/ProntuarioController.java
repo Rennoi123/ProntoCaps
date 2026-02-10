@@ -13,32 +13,40 @@ import java.util.List;
 @RestController
 public class ProntuarioController {
 
-  private final ProntuarioService service;
+    private final ProntuarioService service;
 
-  public ProntuarioController(ProntuarioService service) {
+    public ProntuarioController(ProntuarioService service) {
     this.service = service;
-  }
+    }
 
-  @PreAuthorize("hasAnyRole('ADMIN','MEDICO','PSI','ENFERMEIRO','ASSISTENTE_SOCIAL')")
-  @PostMapping("/pacientes/{pacienteId}/prontuarios")
-  public ResponseEntity<ProntuarioResponse> create(
+    @PreAuthorize("hasAnyRole('ADMIN','MEDICO','PSI')")
+    @PostMapping("/pacientes/{pacienteId}/prontuarios")
+    public ResponseEntity<ProntuarioResponse> criarPrimeiro(
       @PathVariable Long pacienteId,
-      @RequestBody @Valid ProntuarioRequest req,
-      Authentication auth
-  ) {
-    return ResponseEntity.ok(service.create(pacienteId, req, auth.getName()));
-  }
+      @RequestBody @Valid ProntuarioRequest prontuarioRequest,
+      Authentication auth) {
+        return ResponseEntity.ok(service.criarPrimeiro(pacienteId, prontuarioRequest, auth.getName()));
+    }
 
-  @PreAuthorize("hasAnyRole('ADMIN','MEDICO','PSI','ENFERMEIRO','ASSISTENTE_SOCIAL')")
-  @GetMapping("/pacientes/{pacienteId}/prontuarios")
-  public ResponseEntity<List<ProntuarioResponse>> list(@PathVariable Long pacienteId) {
-    return ResponseEntity.ok(service.listByPaciente(pacienteId));
-  }
+    @PreAuthorize("hasAnyRole('ADMIN','MEDICO','PSI')")
+    @PostMapping("/pacientes/{pacienteId}/prontuarios/nova-versao")
+    public ResponseEntity<ProntuarioResponse> criarNovaVersao(
+            @PathVariable Long pacienteId,
+            @RequestBody @Valid ProntuarioRequest prontuarioRequest,
+            Authentication auth) {
+        return ResponseEntity.ok(service.criarNovaVersao(pacienteId, prontuarioRequest.descricao(), auth.getName()));
+    }
 
-  @PreAuthorize("hasRole('ADMIN')")
-  @DeleteMapping("/prontuarios/{id}")
-  public ResponseEntity<Void> inactivate(@PathVariable Long id) {
-    service.inactivate(id);
-    return ResponseEntity.noContent().build();
-  }
+    @PreAuthorize("hasAnyRole('ADMIN','MEDICO','PSI','ENFERMEIRO','ASSISTENTE_SOCIAL')")
+    @GetMapping("/pacientes/{pacienteId}/prontuarios")
+    public ResponseEntity<List<ProntuarioResponse>> listar(@PathVariable Long pacienteId) {
+        return ResponseEntity.ok(service.listByPaciente(pacienteId));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/prontuarios/{id}")
+    public ResponseEntity<Void> inativar(@PathVariable Long id) {
+        service.inativar(id);
+        return ResponseEntity.ok().build();
+    }
 }

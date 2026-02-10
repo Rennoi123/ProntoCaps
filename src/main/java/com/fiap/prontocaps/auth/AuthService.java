@@ -27,8 +27,8 @@ public class AuthService {
       throw new BusinessException("Username ja existe");
     }
     UserEntity u = new UserEntity();
-    u.setUsername(req.username());
-    u.setPasswordHash(encoder.encode(req.password()));
+    u.setName(req.username());
+    u.setPassword(encoder.encode(req.password()));
     u.setRoles(req.roles());
     u.setActive(true);
     userRepository.save(u);
@@ -38,7 +38,7 @@ public class AuthService {
     var user = userRepository.findByUsernameAndActiveTrue(req.username())
         .orElseThrow(() -> new BusinessException("Credenciais invalidas"));
 
-    if (!encoder.matches(req.password(), user.getPasswordHash())) {
+    if (!encoder.matches(req.password(), user.getPassword())) {
       throw new BusinessException("Credenciais invalidas");
     }
 

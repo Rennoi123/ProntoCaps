@@ -1,6 +1,7 @@
 package com.fiap.prontocaps.security;
 
 import com.fiap.prontocaps.user.Roles;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,38 +17,48 @@ import java.util.Map;
 @Service
 public class JwtService {
 
-  private final SecretKey key;
-  private final long expiresMinutes;
+    private final SecretKey key;
+    private final long expiresMinutes;
 
-  public JwtService(
-      @Value("${app.jwt.secret}") String secret,
-      @Value("${app.jwt.expiresMinutes}") long expiresMinutes
-  ) {
-    this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-    this.expiresMinutes = expiresMinutes;
-  }
+    public JwtService(
+            @Value("${app.jwt.secret}") String secret,
+            @Value("${app.jwt.expiresMinutes}") long expiresMinutes
+    ) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        this.expiresMinutes = expiresMinutes;
+    }
 
-  public String generateToken(String username, Roles roles) {
-    Instant now = Instant.now();
-    Instant exp = now.plus(expiresMinutes, ChronoUnit.MINUTES);
+    public String generateToken(String username, Roles roles) {
+        Instant now = Instant.now();
+        Instant exp = now.plus(expiresMinutes, ChronoUnit.MINUTES);
 
-    return Jwts.builder()
-        .subject(username)
-        .claims(Map.of("role", roles.name()))
-        .issuedAt(Date.from(now))
-        .expiration(Date.from(exp))
-        .signWith(key)
-        .compact();
-  }
+        return Jwts.builder()
+                .setSubject(username)
+                .addClaims(Map.of("role", roles.name()))
+                .setIssuedAt(Date.from(now))
+                .setExpiration(Date.from(exp))
+                .signWith(key)
+                .compact();
+    }
 
-  public String extractUsername(String token) {
-    return Jwts.parser().verifyWith(key).build()
-        .parseSignedClaims(token).getPayload().getSubject();
-  }
+    public String extractUsername(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
 
-  public String extractRole(String token) {
-    Object role = Jwts.parser().verifyWith(key).build()
-        .parseSignedClaims(token).getPayload().get("role");
-    return role == null ? null : role.toString();
-  }
+        return claims.getSubject();
+    }
+
+    public String extractRole(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        Object role = claims.get("role");
+        return role == null ? null : role.toString();
+    }
 }

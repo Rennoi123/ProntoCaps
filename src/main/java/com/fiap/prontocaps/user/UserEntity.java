@@ -36,6 +36,9 @@ public class UserEntity implements UserDetails {
   @Column(unique = true, nullable = false)
   private String name;
 
+  @Column()
+  private Boolean active;
+
 
 
   @Override
