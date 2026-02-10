@@ -29,8 +29,11 @@ public class Prontuario {
   @Column(name = "profissional_username", nullable = false)
   private String profissionalUsername;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = 2000)
   private String descricao;
+
+  @Column(name = "classificacao_risco")
+  private String classificacaoRisco;
 
   @Column(nullable = false)
   private boolean ativo = true;
