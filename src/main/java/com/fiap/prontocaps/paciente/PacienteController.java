@@ -22,13 +22,13 @@ public class PacienteController {
   @PreAuthorize("hasAnyRole('ADMIN','MEDICO','PSI','ENFERMEIRO','ASSISTENTE_SOCIAL')")
   @PostMapping
   public ResponseEntity<PacienteResponse> create(@RequestBody @Valid PacienteRequest req) {
-    return ResponseEntity.ok(service.create(req));
+    return ResponseEntity.ok(service.criar(req));
   }
 
   @PreAuthorize("hasAnyRole('ADMIN','MEDICO','PSI','ENFERMEIRO','ASSISTENTE_SOCIAL')")
   @GetMapping("/{id}")
   public ResponseEntity<PacienteResponse> get(@PathVariable Long id) {
-    return ResponseEntity.ok(service.get(id));
+    return ResponseEntity.ok(service.buscarPorId(id));
   }
 
   @PreAuthorize("hasAnyRole('ADMIN','MEDICO','PSI','ENFERMEIRO','ASSISTENTE_SOCIAL')")
@@ -46,7 +46,7 @@ public class PacienteController {
   @PreAuthorize("hasRole('ADMIN')")
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> inactivate(@PathVariable Long id) {
-    service.inactivate(id);
+    service.inativar(id);
     return ResponseEntity.noContent().build();
   }
 }

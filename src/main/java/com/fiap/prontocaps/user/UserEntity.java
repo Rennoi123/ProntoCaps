@@ -30,16 +30,20 @@ public class UserEntity implements UserDetails {
   @Column(nullable = false)
   private String password;
 
-  private String name;
-
   @Enumerated(EnumType.STRING)
   private Roles roles;
 
-  private boolean active = true;
+  @Column(unique = true, nullable = false)
+  private String name;
+
+  @Column()
+  private Boolean active;
+
+
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(new SimpleGrantedAuthority(roles.name()));
+    return List.of(new SimpleGrantedAuthority("ROLE_" + roles.name()));
   }
 
   @Override
@@ -51,5 +55,5 @@ public class UserEntity implements UserDetails {
   @Override public boolean isAccountNonExpired() { return true; }
   @Override public boolean isAccountNonLocked() { return true; }
   @Override public boolean isCredentialsNonExpired() { return true; }
-  @Override public boolean isEnabled() { return active; }
+  @Override public boolean isEnabled() { return true; }
 }
