@@ -4,3 +4,4 @@
 *.log
 .DS_Store
 docker-compose.yml
+application.yml
