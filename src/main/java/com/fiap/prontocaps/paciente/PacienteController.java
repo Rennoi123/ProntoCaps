@@ -27,7 +27,7 @@ public class PacienteController {
 
   @PreAuthorize("hasAnyRole('ADMIN','MEDICO','PSI','ENFERMEIRO','ASSISTENTE_SOCIAL')")
   @GetMapping("/{id}")
-  public ResponseEntity<PacienteResponse> get(@PathVariable Long id) {
+  public ResponseEntity<PacienteResponse> get(@PathVariable("id") Long id) {
     return ResponseEntity.ok(service.buscarPorId(id));
   }
 
@@ -39,13 +39,13 @@ public class PacienteController {
 
   @PreAuthorize("hasAnyRole('ADMIN','MEDICO','PSI','ENFERMEIRO')")
   @PutMapping("/{id}")
-  public ResponseEntity<PacienteResponse> update(@PathVariable Long id, @RequestBody @Valid PacienteRequest req) {
+  public ResponseEntity<PacienteResponse> update(@PathVariable("id") Long id, @RequestBody @Valid PacienteRequest req) {
     return ResponseEntity.ok(service.update(id, req));
   }
 
   @PreAuthorize("hasRole('ADMIN')")
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> inactivate(@PathVariable Long id) {
+  @PutMapping("/{id}/inativar-usuario")
+  public ResponseEntity<Void> inactivate(@PathVariable("id") Long id) {
     service.inativar(id);
     return ResponseEntity.noContent().build();
   }

@@ -22,7 +22,7 @@ public class ProntuarioController {
     @PreAuthorize("hasAnyRole('ADMIN','MEDICO','PSI')")
     @PostMapping("/pacientes/{pacienteId}/prontuarios")
     public ResponseEntity<ProntuarioResponse> criarPrimeiro(
-      @PathVariable Long pacienteId,
+      @PathVariable("pacienteId") Long pacienteId,
       @RequestBody @Valid ProntuarioRequest prontuarioRequest,
       Authentication auth) {
         return ResponseEntity.ok(service.criarPrimeiro(pacienteId, prontuarioRequest, auth.getName()));
@@ -31,7 +31,7 @@ public class ProntuarioController {
     @PreAuthorize("hasAnyRole('ADMIN','MEDICO','PSI')")
     @PostMapping("/pacientes/{pacienteId}/prontuarios/nova-versao")
     public ResponseEntity<ProntuarioResponse> criarNovaVersao(
-            @PathVariable Long pacienteId,
+            @PathVariable("pacienteId") Long pacienteId,
             @RequestBody @Valid ProntuarioRequest prontuarioRequest,
             Authentication auth) {
         return ResponseEntity.ok(service.criarNovaVersao(pacienteId, prontuarioRequest.descricao(), auth.getName()));
@@ -39,7 +39,7 @@ public class ProntuarioController {
 
     @PreAuthorize("hasAnyRole('ADMIN','MEDICO','PSI','ENFERMEIRO','ASSISTENTE_SOCIAL')")
     @GetMapping("/pacientes/{pacienteId}/prontuarios")
-    public ResponseEntity<List<ProntuarioResponse>> listar(@PathVariable Long pacienteId) {
+    public ResponseEntity<List<ProntuarioResponse>> listar(@PathVariable("pacienteId") Long pacienteId) {
         return ResponseEntity.ok(service.listByPaciente(pacienteId));
     }
 
