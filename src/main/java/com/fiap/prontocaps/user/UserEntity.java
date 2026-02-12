@@ -39,11 +39,9 @@ public class UserEntity implements UserDetails {
   @Column()
   private Boolean active;
 
-
-
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(new SimpleGrantedAuthority("ROLE_" + roles.name()));
+    return List.of(new SimpleGrantedAuthority(roles.name()));
   }
 
   @Override

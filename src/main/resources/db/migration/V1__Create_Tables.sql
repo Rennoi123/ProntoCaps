@@ -23,6 +23,8 @@ CREATE TABLE prontuario (
                             profissional_username VARCHAR(255) NOT NULL,
                             descricao VARCHAR(2000) NOT NULL,
                             classificacao_risco VARCHAR(50),
+                            versao INTEGER NOT NULL,
+                            atual BOOLEAN NOT NULL,
                             ativo BOOLEAN NOT NULL DEFAULT TRUE,
                             created_at TIMESTAMP NOT NULL DEFAULT NOW(),
                             CONSTRAINT fk_prontuario_paciente FOREIGN KEY (paciente_id) REFERENCES paciente(id)

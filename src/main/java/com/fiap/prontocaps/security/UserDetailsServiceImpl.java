@@ -1,5 +1,6 @@
 package com.fiap.prontocaps.security;
 
+import com.fiap.prontocaps.user.UserEntity;
 import com.fiap.prontocaps.user.UserRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return User
                 .withUsername(user.getUsername())
                 .password(user.getPassword())
-                .roles(user.getRoles().name())
+                .authorities(user.getAuthorities())
                 .disabled(!user.isEnabled())
                 .build();
     }
