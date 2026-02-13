@@ -1,4 +1,4 @@
-erver:
+server:
   port: 8080
 
 spring:
@@ -9,15 +9,18 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql: true
 
-app:
-  jwt:
-    secret: ${JWT_SECRET:dev-secret-dev-secret-dev-secret-dev-secret-32chars}
-    expiresMinutes: ${JWT_EXPIRES_MINUTES:120}
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
+jwt:
+  secret: ${JWT_SECRET:dev-secret-dev-secret-dev-secret-dev-secret-32chars}
+  expiration: ${JWT_EXPIRATION:21600000}
 
 springdoc:
   swagger-ui:
