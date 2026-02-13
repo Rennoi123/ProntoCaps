@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity // Permite usar @PreAuthorize nos controllers
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final JwtAuthenticationEntryPoint unauthorizedHandler;

@@ -47,7 +47,7 @@ class ProntuarioControllerTest {
 
         when(prontuarioService.listByPaciente(pacienteId))
                 .thenReturn(List.of(
-                        new ProntuarioResponse(1L, pacienteId, null, "medico", "desc", "alta", 1, true, true)
+                        new ProntuarioResponse(1L, pacienteId, null, "medico", "desc", "alta", 1, true, true, "string teste")
                 ));
 
         mockMvc.perform(get("/pacientes/{pacienteId}/prontuarios", pacienteId))

@@ -1,5 +1,6 @@
 package com.fiap.prontocaps.prontuario;
 
+import com.fiap.prontocaps.alerta.AlertaRepository;
 import com.fiap.prontocaps.common.BusinessException;
 import com.fiap.prontocaps.common.NotFoundException;
 import com.fiap.prontocaps.paciente.Paciente;
@@ -12,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,6 +27,9 @@ class ProntuarioServiceTest {
 
     @Mock
     private PacienteRepository pacienteRepository;
+
+    @Mock
+    private AlertaRepository alertaRepository;
 
     @InjectMocks
     private ProntuarioService service;
@@ -43,6 +48,8 @@ class ProntuarioServiceTest {
         when(pacienteRepository.findById(1L)).thenReturn(Optional.of(paciente));
         when(prontuarioRepository.findByPacienteIdAndAtualTrue(1L))
                 .thenReturn(Optional.empty());
+
+        when(alertaRepository.findByPacienteIdAndStatus(anyLong(), anyString())).thenReturn(List.of());
 
         ProntuarioRequest request = new ProntuarioRequest("Primeiro atendimento");
 
@@ -153,5 +160,49 @@ class ProntuarioServiceTest {
         assertThrows(NotFoundException.class, () ->
                 service.criarPrimeiro(99L, new ProntuarioRequest("Teste"), "medico1")
         );
+    }
+
+    @Test
+    void deveCriarNovaVersaoComAltoRiscoEHashEncadeado() {
+        Prontuario prontuarioAnterior = new Prontuario();
+        prontuarioAnterior.setId(1L);
+        prontuarioAnterior.setVersao(1);
+        prontuarioAnterior.setAtual(true);
+        prontuarioAnterior.setAssinaturaDigital("HASH_ANTERIOR");
+
+        when(pacienteRepository.findById(1L)).thenReturn(Optional.of(paciente));
+        when(prontuarioRepository.findByPacienteIdAndAtualTrue(1L))
+                .thenReturn(Optional.of(prontuarioAnterior));
+        when(alertaRepository.findByPacienteIdAndStatus(anyLong(), anyString())).thenReturn(List.of());
+
+        when(prontuarioRepository.save(any(Prontuario.class)))
+                .thenAnswer(inv -> inv.getArgument(0));
+
+        var response = service.criarNovaVersao(1L, "Risco de suicídio identificado", "medico1");
+
+        assertEquals(2, response.versao());
+        assertEquals("ALTO_RISCO_VERMELHO", response.classificacaoRisco());
+        assertNotEquals("HASH_ANTERIOR", response.assinaturaDigital());
+
+        verify(prontuarioRepository, times(2)).save(any());
+    }
+
+    @Test
+    void deveCriarPrimeiroProntuarioComHash() {
+        when(pacienteRepository.findById(1L)).thenReturn(Optional.of(paciente));
+        when(prontuarioRepository.findByPacienteIdAndAtualTrue(1L))
+                .thenReturn(Optional.empty());
+        when(alertaRepository.findByPacienteIdAndStatus(anyLong(), anyString())).thenReturn(List.of());
+
+        ProntuarioRequest request = new ProntuarioRequest("Paciente com insônia leve");
+
+        var response = service.criarPrimeiro(1L, request, "medico1");
+
+        assertEquals(1, response.versao());
+        assertTrue(response.versaoAtual());
+        assertNotNull(response.assinaturaDigital());
+        assertEquals("MEDIO_RISCO_AMARELO", response.classificacaoRisco());
+
+        verify(prontuarioRepository).save(any(Prontuario.class));
     }
 }
