@@ -2,6 +2,7 @@ package com.fiap.prontocaps.prontuario;
 
 import com.fiap.prontocaps.prontuario.dto.ProntuarioRequest;
 import com.fiap.prontocaps.prontuario.dto.ProntuarioResponse;
+import jakarta.transaction.UserTransaction;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,7 +17,7 @@ public class ProntuarioController {
     private final ProntuarioService service;
 
     public ProntuarioController(ProntuarioService service) {
-    this.service = service;
+        this.service = service;
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','MEDICO','PSI')")
@@ -44,8 +45,8 @@ public class ProntuarioController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/prontuarios/{id}")
-    public ResponseEntity<Void> inativar(@PathVariable Long id) {
+    @PutMapping("/prontuarios/{id}/inativar")
+    public ResponseEntity<Void> inativar(@PathVariable("id") Long id) {
         service.inativar(id);
         return ResponseEntity.ok().build();
     }

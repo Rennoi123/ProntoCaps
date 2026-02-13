@@ -18,14 +18,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) {
-        UserEntity user = userRepository.findByUsernameAndActiveTrue(username)
+    public UserDetails loadUserByUsername(String email) {
+        UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario nao encontrado"));
 
         return User
                 .withUsername(user.getUsername())
                 .password(user.getPassword())
-                .roles(user.getRoles().name())
+                .authorities(user.getAuthorities())
                 .disabled(!user.isEnabled())
                 .build();
     }

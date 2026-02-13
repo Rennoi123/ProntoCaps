@@ -40,6 +40,7 @@ public class ProntuarioService {
         prontuario.setAtivo(true);
         prontuario.setAtual(true);
         prontuarioRepository.save(prontuario);
+        prontuario.setClassificacaoRisco(calcularRisco(prontuarioRequest.descricao()));
 
         return toResponse(prontuario);
     }
@@ -62,8 +63,28 @@ public class ProntuarioService {
         novaVersao.setAtivo(true);
         novaVersao.setAtual(true);
         novaVersao.setDataRegistro(LocalDateTime.now());
+        novaVersao.setClassificacaoRisco(calcularRisco(novaDescricao));
+
 
         return toResponse(prontuarioRepository.save(novaVersao));
+    }
+
+    private String calcularRisco(String texto) {
+        if (texto == null) return "PADRAO";
+        String t = texto.toLowerCase();
+
+        if (t.contains("suicidio") || t.contains("suicídio") ||
+                t.contains("agressivo") || t.contains("surto") ||
+                t.contains("alucinação") || t.contains("risco de vida")) {
+            return "ALTO_RISCO_VERMELHO";
+        }
+
+        if (t.contains("ansiedade severa") || t.contains("depressão profunda") ||
+                t.contains("insônia") || t.contains("medicamento")) {
+            return "MEDIO_RISCO_AMARELO";
+        }
+
+        return "BAIXO_RISCO_VERDE";
     }
 
     public List<ProntuarioResponse> listByPaciente(Long pacienteId) {
@@ -85,6 +106,7 @@ public class ProntuarioService {
                 prontuario.getDataRegistro(),
                 prontuario.getProfissionalUsername(),
                 prontuario.getDescricao(),
+                prontuario.getClassificacaoRisco(),
                 prontuario.getVersao(),
                 prontuario.getAtual(),
                 prontuario.isAtivo()

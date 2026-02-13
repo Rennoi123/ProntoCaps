@@ -15,8 +15,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: 123456
 
       # JWT
-      JWT_SECRET: "troque-isto-por-uma-chave-bem-grande-com-32-ou-mais-caracteres"
-      JWT_EXPIRES_MINUTES: 120
+      JWT_SECRET: "a4e6a1e3b5e4f2a3c8d7b1a0c9e8d7c6b5a4e3f2a1c8d7b9a0c9e8d7c6b5a4e3"
+      JWT_EXPIRATION: 7200000
 
     depends_on:
       - db

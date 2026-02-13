@@ -1,7 +1,6 @@
 package com.fiap.prontocaps.prontuario;
 
 import com.fiap.prontocaps.prontuario.dto.ProntuarioResponse;
-import com.fiap.prontocaps.security.JwtService;
 import com.fiap.prontocaps.security.JwtTokenProvider;
 import com.fiap.prontocaps.security.JwtAuthenticationEntryPoint;
 import com.fiap.prontocaps.user.UserRepository;
@@ -30,10 +29,6 @@ class ProntuarioControllerTest {
     @MockBean
     private ProntuarioService prontuarioService;
 
-    // --- Mocks de Segurança (Necessários para o ApplicationContext subir) ---
-    @MockBean
-    private JwtService jwtService;
-
     @MockBean
     private UserRepository userRepository;
 
@@ -52,7 +47,7 @@ class ProntuarioControllerTest {
 
         when(prontuarioService.listByPaciente(pacienteId))
                 .thenReturn(List.of(
-                        new ProntuarioResponse(1L, pacienteId, null, "medico", "desc", 1, true, true)
+                        new ProntuarioResponse(1L, pacienteId, null, "medico", "desc", "alta", 1, true, true)
                 ));
 
         mockMvc.perform(get("/pacientes/{pacienteId}/prontuarios", pacienteId))

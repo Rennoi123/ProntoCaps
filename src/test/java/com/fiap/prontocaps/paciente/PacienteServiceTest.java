@@ -175,7 +175,7 @@ class PacienteServiceTest {
 
         PacienteRequest request = new PacienteRequest(
                 "Nome Atualizado",
-                paciente.getCpf(), // mesmo CPF
+                paciente.getCpf(),
                 LocalDate.of(1990, 1, 1)
         );
 
@@ -219,39 +219,4 @@ class PacienteServiceTest {
                 pacienteService.buscarPorId(99L)
         );
     }
-
-    /*@Test
-    void naoDeveInativarPacienteComProntuarioAtivo() {
-
-        paciente.setAtivo(true);
-
-        when(pacienteRepository.findById(1L))
-                .thenReturn(Optional.of(paciente));
-
-        when(prontuarioRepository.findByPacienteIdAndAtualTrue(1L))
-                .thenReturn(Optional.of(new Prontuario()));
-
-        assertThrows(BusinessException.class, () ->
-                pacienteService.inativar(1L)
-        );
-
-        verify(pacienteRepository, never()).save(any());
-    }
-
-    @Test
-    void deveInativarPacienteSemProntuarioAtivo() {
-
-        paciente.setAtivo(true);
-
-        when(pacienteRepository.findById(1L))
-                .thenReturn(Optional.of(paciente));
-
-        when(prontuarioRepository.findByPacienteIdAndAtualTrue(1L))
-                .thenReturn(Optional.empty());
-
-        pacienteService.inativar(1L);
-
-        assertFalse(paciente.isAtivo());
-        verify(pacienteRepository).save(paciente);
-    }*/
 }

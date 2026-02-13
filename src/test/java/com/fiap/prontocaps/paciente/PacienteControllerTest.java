@@ -1,7 +1,6 @@
 package com.fiap.prontocaps.paciente;
 
 import com.fiap.prontocaps.paciente.dto.PacienteResponse;
-import com.fiap.prontocaps.security.JwtService;
 import com.fiap.prontocaps.security.JwtTokenProvider;
 import com.fiap.prontocaps.security.JwtAuthenticationEntryPoint;
 import com.fiap.prontocaps.user.UserRepository;
@@ -29,9 +28,6 @@ class PacienteControllerTest {
 
     @MockBean
     private PacienteService pacienteService;
-
-    @MockBean
-    private JwtService jwtService;
 
     @MockBean
     private UserRepository userRepository;

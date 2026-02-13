@@ -8,6 +8,8 @@ public record ProntuarioResponse(
     LocalDateTime dataRegistro,
     String profissionalUsername,
     String descricao,
+    String classificacaoRisco,
     Integer versao,
     boolean versaoAtual,
-    boolean prontuarioAtivo) {}
+    boolean prontuarioAtivo
+) {}

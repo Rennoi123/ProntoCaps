@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.time.LocalDate; // Importação necessária
+import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
