@@ -24,7 +24,7 @@ public class AlertaController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'ASSISTENTE_SOCIAL')")
     @PutMapping("/{id}/resolver")
-    public ResponseEntity<Void> marcarComoResolvido(@PathVariable Long id) {
+    public ResponseEntity<Void> marcarComoResolvido(@PathVariable("id") Long id) {
         repository.findById(id).ifPresent(alerta -> {
             alerta.setStatus("RESOLVIDO");
             repository.save(alerta);
