@@ -26,6 +26,7 @@ CREATE TABLE prontuario (
                             versao INTEGER NOT NULL,
                             atual BOOLEAN NOT NULL,
                             ativo BOOLEAN NOT NULL DEFAULT TRUE,
+                            assinatura_digital VARCHAR(512),
                             created_at TIMESTAMP NOT NULL DEFAULT NOW(),
                             CONSTRAINT fk_prontuario_paciente FOREIGN KEY (paciente_id) REFERENCES paciente(id)
 );

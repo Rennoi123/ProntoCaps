@@ -11,5 +11,6 @@ public record ProntuarioResponse(
     String classificacaoRisco,
     Integer versao,
     boolean versaoAtual,
-    boolean prontuarioAtivo
+    boolean prontuarioAtivo,
+    String assinaturaDigital
 ) {}
